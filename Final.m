@@ -20,15 +20,17 @@ L_base = sum(E0,1);
 rho = 6*ones(1,h);
 rho(1:6)   = 5;
 rho(19:22) = 9;
-alpha = zeros(n,h);
-alpha(:,19:22) = 1.5;
+alpha = 1.5*ones(n,h);
+alpha(:,19:22) = 2.5;
+
+
 
 %% 2) Incentive-Only Model (no elasticity matrix)
 % elasticity by hour (from your image)
 xi = zeros(1,h);
-xi([1:6 23:24]) = 0.5;  % 00–06 & 22–23
-xi(7:16)        = 0.3;  % 07–16
-xi(17:22)       = 0.1;  % 17–21
+xi([1:6 23:24]) = 0.5;  % 00â€“06 & 22â€“23
+xi(7:16)        = 0.3;  % 07â€“16
+xi(17:22)       = 0.1;  % 17â€“21
 
 DE1 = zeros(n,h);
 for i = 1:n
@@ -45,7 +47,7 @@ DR1    = sum(DE1,1);
 
 %% 3) Price-Driven Model (with Ep)
 Ep = -0.3*eye(h) + 0.1*(ones(h)-eye(h));    % use your chosen Ep
-pct_dev = (rho - base_price)./base_price;    % 1×h
+pct_dev = (rho - base_price)./base_price;    % 1Ã—h
 DE2 = zeros(n,h);
 for i = 1:n
     for j = 1:h
@@ -62,9 +64,9 @@ DR2     = sum(DE2,1);
 % Define Ea (incentive elasticity)
 Ea =  0.8*eye(h) - 0.05*(ones(h)-eye(h));
 % Combined elasticity
-Ecomb = lambda*Ep + (1-lambda)*Ea;            % h×h
-pct_dev = (rho - base_price)./base_price;     % 1×h
-resp_vec = Ecomb * pct_dev.';                 % h×1
+Ecomb = lambda*Ep + (1-lambda)*Ea;            % hÃ—h
+pct_dev = (rho - base_price)./base_price;     % 1Ã—h
+resp_vec = Ecomb * pct_dev.';                 % hÃ—1
 
 DE3 = zeros(n,h);
 for i = 1:n
@@ -103,7 +105,7 @@ bar_centers = 1:length(profits);
 
 % Add text labels
 for i = 1:3
-    text(bar_centers(i), profits(i) + 3,...
+    text(bar_centers(i), profits(i) + 2,...
         sprintf('Rs%.2f', profits(i)),...
         'HorizontalAlignment','center',...
         'VerticalAlignment','top',...
